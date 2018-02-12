@@ -1,43 +1,36 @@
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
+from rest_framework.views import APIView
 from app.models import Skill
 from app.serializers import SkillSerializer, LoginSerializer
-
-@api_view(['GET'])
-def get_csrf(request):
-    return Response(csrf.get_token(request))
+import pdb
 
 # Skills API
-@api_view(['GET', 'POST'])
-def skills(request):
-    if request.method == 'GET':
-        skills = Skill.objects.all()
+class SkillsTest(APIView):
+    def get(self, request, format=None):
+        user = request.user
+
+        skills = Skill.objects.filter(user=user)
         skills_serialized = SkillSerializer(skills, many=True)
         return Response(skills_serialized.data)
 
-    elif request.method == 'POST':
-        serializer = SkillSerializer(data=request.data)
+    def post(self, request, format=None):
+        data = request.data
+        data['user'] = request.user
 
-        if(serializer.is_valid()):
-            serializer.save()
+        serializer = SkillSerializer(data)
 
-            skills = Skill.objects.all()
-            skills_serialized = SkillSerializer(skills, many=True)
-            return Response(skills_serialized.data)
+        serializer.create(data)
 
-        return Response(status=400)
-return Response(status=403)
+        return Response(serializer.data)
 
 # Authentication
-@api_view(['POST'])
-def auth(request):
-    if(request.method == 'POST'):
-        print(request.user)
+class Auth(APIView):
+    def post(self, request, format=None):
         auth_data = request.data
 
         username = auth_data['username'] or None
@@ -46,9 +39,18 @@ def auth(request):
         if(username and password):
             user = authenticate(request, username=username, password=password)
 
-            if user != None:
+            if user is not None:
                 login(request, user)
                 user_data = LoginSerializer(user).data
-                return Response("True")
+                return Response(user_data)
 
-    return Response(status=403)
+        return Response(status=403)
+
+class IdentifyUser(APIView):
+    def get(self, request, format=None):
+        user = request.user
+
+        if request.user.is_authenticated:
+            return Response(LoginSerializer(user).data)
+
+        return Response(status=403)

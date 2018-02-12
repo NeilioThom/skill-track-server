@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 
@@ -10,6 +11,18 @@ class Skill(models.Model):
         db_table = 'Skill'
 
     name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now=True)
+
+    def create(self, validated_data):
+        skill = Skill(
+            name=validated_data['name'],
+            user=validated_data['user'],
+            entries=[]
+        )
+
+        skill.save()
+        return skill
 
     def __str__(self):
         return self.name
@@ -17,7 +30,12 @@ class Skill(models.Model):
 class TimeEntry(models.Model):
     class Meta():
         db_table = 'TimeEntry'
+        verbose_name_plural = "Time Entries"
 
-    duration = models.IntegerField()
-    created_date = models.DateField()
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    time_spent = models.IntegerField()
+    comment = models.CharField(max_length=1000)
+    created_date = models.DateTimeField(auto_now=True)
+    skill = models.ForeignKey(Skill, related_name='entries', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Entry " + str(self.id) + " for " + self.skill.name

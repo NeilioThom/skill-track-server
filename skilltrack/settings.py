@@ -15,14 +15,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'app'
+    'django.contrib.staticfiles'
 ]
 
 REST_FRAMEWORK = {
@@ -38,7 +38,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'skilltrack.urls'
+
+AUTHENTICATION_BACKENDS = [ 'django.contrib.auth.backends.ModelBackend' ]
 
 TEMPLATES = [
     {
