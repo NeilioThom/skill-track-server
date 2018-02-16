@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+import datetime
 
 # Create your models here.
 class Skill(models.Model):
@@ -11,6 +12,7 @@ class Skill(models.Model):
         db_table = 'Skill'
 
     name = models.CharField(max_length=100)
+    weekly_goal = models.IntegerField()
     user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now=True)
 
@@ -20,6 +22,9 @@ class Skill(models.Model):
             user=validated_data['user'],
             entries=[]
         )
+
+    def withDate(self):
+        return self.entries.filter(entries__created_date__gt=datetime.datetime.now() - datetime.timedelta(days=7))
 
         skill.save()
         return skill
