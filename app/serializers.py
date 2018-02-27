@@ -12,8 +12,24 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         exclude = ('user',)
 
+    id = serializers.IntegerField(read_only=True)
     total_time_spent = serializers.IntegerField(read_only=True)
     entries = TimeEntrySerializer(many=True, default=[], read_only=True)
+
+    def create(self, validated_data):
+        print(validated_data)
+        return Skill.objects.create(
+            name=validated_data['name'],
+            weekly_goal=validated_data['weekly_goal'],
+            user=validated_data['user']
+        )
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.weekly_goal = validated_data.get('weekly_goal', instance.weekly_goal)  
+        instance.save()
+
+        return instance
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:

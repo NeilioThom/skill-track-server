@@ -13,44 +13,66 @@ import datetime
 
 # Skills API
 class Skills(APIView):
+    # Can get one or multiple skills
     def get(self, request, skill_id=None, format=None):
         if(skill_id is not None):
-            return(self.get_single_skill(skill_id=skill_id))
+            return(self.get_single_skill(request, skill_id=skill_id))
 
         return(self.get_multiple_skills(request))
 
     # Create a new skill
     def post(self, request, format=None):
         data = request.data
-        data['user'] = request.user
 
-        serializer = SkillSerializer(data)
-        serializer.create(data)
+        serializer = SkillSerializer(data=data)
+
+        if(serializer.is_valid()):
+            serializer.save(user=request.user)
 
         return Response(serializer.data)
+
+    # Updates an existing skill
+    def put(self, request, format=None):
+        data = request.data
+        skill = Skill.objects.get(pk=data['skill_id'])
+
+        # Make sure the skill belongs to this user
+        if skill.user != request.user:
+            return Response(status=404)
+        
+        skill_serialized = SkillSerializer(skill, data=data)
+
+        if(skill_serialized.is_valid()):
+            skill_serialized.save()
+
+        return Response(skill_serialized.data)
 
     # Returns an array of multiple skills
     def get_multiple_skills(self, request):
         user = request.user
         skills = Skill.objects.filter(user=user).order_by('-id')
+        
 
         # Serialize and return the final query
         skills_serialized = SkillSerializer(skills, many=True)
         return Response(skills_serialized.data)
 
     # Gets data about one single skill and entries
-    def get_single_skill(self, skill_id=None):
-        skill = Skill.objects.get(pk=skill_id)
+    def get_single_skill(self, request, skill_id=None):
+        user = request.user
 
-        if(skill is not None):
-            skill_serialized = SkillSerializer(skill)
-            return Response(skill_serialized.data)
+        try:
+            skill = Skill.objects.get(pk=skill_id, user=user)
+        except Skill.DoesNotExist:
+            return Response(status=404)
 
-        return Response(status=404)
+        skill_serialized = SkillSerializer(skill)
+        return Response(skill_serialized.data)
 
 # Time Entries
 class TimeEntries(APIView):
-    def post(self, request, skill_id=None, format=None):
+    def post(self, request, format=None):
+        skill_id = request.GET.get('skill')
         data = request.data
 
         if skill_id is not None:
