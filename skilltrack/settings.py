@@ -6,10 +6,44 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET')
 ENVIRON = os.environ.get('ENVIRON')
 
-
 DEBUG=True
 
 ALLOWED_HOSTS = ['*']
+
+# Debug settings (Cors)
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
+CORS_ORIGIN_WHITELIST = (
+    'www.10khours.io',
+    '10khours.io',
+    'api.10khours.io',
+    '3829927a.ngrok.io',
+    'ngrok.io',
+    'localhost:8000',
+    'localhost:3000',
+    '127.0.0.1:9000'
+)
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -112,41 +146,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/staticfiles/'
-
-# Debug settings (Cors)
-CORS_ALLOW_METHODS = (
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-)
-
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-)
-
-CORS_ORIGIN_WHITELIST = (
-    'www.10khours.io',
-    '10khours.io',
-    'api.10khours.io',
-    '3829927a.ngrok.io',
-    'ngrok.io',
-    'localhost:8000',
-    'localhost:3000',
-    '127.0.0.1:9000'
-)
-
-CORS_ALLOW_CREDENTIALS = True
 
 # Logging settings
 LOGGING = {
