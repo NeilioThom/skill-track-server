@@ -33,9 +33,9 @@ CORS_ALLOW_HEADERS = (
 )
 
 CORS_ORIGIN_WHITELIST = (
-    'www.10khours.io',
-    '10khours.io',
-    'api.10khours.io',
+    'www.10k-hours.io',
+    '10k-hours.io',
+    'api.10k-hours.io',
     '3829927a.ngrok.io',
     'ngrok.io',
     'localhost:8000',
