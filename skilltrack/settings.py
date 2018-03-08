@@ -15,7 +15,7 @@ DEBUG = False
 if ENVIRON == 'DEBUG':
    DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '.herokuapp.com', '.10k-hours.io']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
