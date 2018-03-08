@@ -12,7 +12,7 @@ ENVIRON = os.environ.get('ENVIRON')
 
 DEBUG = False
 
-if ENVIRON != 'DEBUG':
+if ENVIRON == 'DEBUG':
     DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '.herokuapp.com', '.10k-hours.io']
