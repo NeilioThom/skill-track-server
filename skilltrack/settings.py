@@ -6,10 +6,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET')
 ENVIRON = os.environ.get('ENVIRON')
 
-DEBUG = False
 
-if ENVIRON == 'DEBUG':
-    DEBUG = True
+DEBUG=True
 
 ALLOWED_HOSTS = ['*']
 
@@ -68,8 +66,15 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    'default': {
+# Database
+# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+
+DATABASES = { }
+
+if ENVIRON == 'PROD':
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+else:
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'skilltrack',
         'USER': 'postgres',
@@ -77,12 +82,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432'
     }
-}
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-if DEBUG != True:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -146,3 +145,20 @@ if DEBUG:
     )
 
     CORS_ALLOW_CREDENTIALS = True
+
+# Logging settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
