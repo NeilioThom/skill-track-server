@@ -17,6 +17,6 @@ urlpatterns = [
     url(r'auth/identify/$', IdentifyUser.as_view()),
     path(r'entries/', login_required(TimeEntries.as_view())),
     path(r'skills/', login_required(Skills.as_view())),    
-    path(r'skills/<int:skill_id>', login_required(Skills.as_view())),
+    path(r'skills/<uuid:skill_id>/', login_required(Skills.as_view())),
     url(r'^__debug__/', include(debug_toolbar.urls))
 ]

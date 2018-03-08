@@ -12,7 +12,7 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         exclude = ('user',)
 
-    id = serializers.IntegerField(read_only=True)
+    id = serializers.UUIDField(read_only=True)
     total_time_spent = serializers.IntegerField(read_only=True)
     entries = TimeEntrySerializer(many=True, default=[], read_only=True)
 

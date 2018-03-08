@@ -6,11 +6,13 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 from datetime import date, timedelta
+import uuid
 
 class Skill(models.Model):
     class Meta():
         db_table = 'Skill'
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     weekly_goal = models.IntegerField()
     total_time_spent = models.IntegerField()

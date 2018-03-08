@@ -32,9 +32,9 @@ class Skills(APIView):
         return Response(serializer.data)
 
     # Updates an existing skill
-    def put(self, request, format=None):
+    def put(self, request, skill_id=None, format=None):
         data = request.data
-        skill = Skill.objects.get(pk=data['skill_id'])
+        skill = Skill.objects.get(pk=skill_id)
 
         # Make sure the skill belongs to this user
         if skill.user != request.user:
@@ -87,10 +87,9 @@ class TimeEntries(APIView):
                 return Response(serializer.data)
 
     # GET entries for a skill
-    # /entries?skill=1&page=1
     def get(self, request, format=None):
         try:
-            skill_id = int(request.GET.get('skill_id')) or None
+            skill_id = request.GET.get('skill_id') or None
             page_num = int(request.GET.get('page')) or None
         except ValueError:
             return Response({ 'error': 'Invalid data type passed to API.' }, status=500)
@@ -105,7 +104,6 @@ class TimeEntries(APIView):
         entries_serialized = TimeEntrySerializer(entries, many=True)
 
         return Response(entries_serialized.data)
-
 
 # Authentication
 class Auth(APIView):
