@@ -12,8 +12,8 @@ ENVIRON = os.environ.get('ENVIRON')
 
 DEBUG = False
 
-if ENVIRON == 'DEBUG':
-    DEBUG = True
+#if ENVIRON == 'DEBUG':
+ #   DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '.herokuapp.com', '.10k-hours.io']
 
@@ -76,11 +76,11 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DBNAME'),
-        'USER': os.environ.get('DBUSER'),
-        'PASSWORD': os.environ.get('DBPASSWORD'),
-        'HOST': os.environ.get('DBHOST'),
-        'PORT': os.environ.get('DBPORT')
+        'NAME': 'skilltrack',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
