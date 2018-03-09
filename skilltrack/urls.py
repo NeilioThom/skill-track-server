@@ -11,12 +11,12 @@ import debug_toolbar
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^docs/', include_docs_urls(title='Skills API')),
-    url(r'auth/$', Auth.as_view()),
-    url(r'auth/identify/$', IdentifyUser.as_view()),
+    path(r'^admin/', admin.site.urls),
+    path(r'^docs/', include_docs_urls(title='Skills API')),
+    path(r'auth/', Auth.as_view()),
+    path(r'auth/identify/', IdentifyUser.as_view()),
     path(r'entries/', login_required(TimeEntries.as_view())),
     path(r'skills/', login_required(Skills.as_view())),    
     path(r'skills/<uuid:skill_id>/', login_required(Skills.as_view())),
-    url(r'^__debug__/', include(debug_toolbar.urls))
+    path(r'__debug__/', include(debug_toolbar.urls))
 ]

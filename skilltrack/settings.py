@@ -36,8 +36,6 @@ CORS_ORIGIN_WHITELIST = (
     'www.10k-hours.io',
     '10k-hours.io',
     'api.10k-hours.io',
-    '3829927a.ngrok.io',
-    'ngrok.io',
     'localhost:8000',
     'localhost:3000',
     '127.0.0.1:9000'
