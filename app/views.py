@@ -32,9 +32,9 @@ class Skills(APIView):
         return Response(serializer.data)
 
     # Updates an existing skill
-    def put(self, request, skill_id=None, format=None):
+    def put(self, request, format=None):
         data = request.data
-        skill = Skill.objects.get(pk=skill_id)
+        skill = Skill.objects.get(pk=data['skill_id'])
 
         # Make sure the skill belongs to this user
         if skill.user != request.user:
@@ -133,6 +133,9 @@ class IdentifyUser(APIView):
         user = request.user
 
         if request.user.is_authenticated:
-            return Response(LoginSerializer(user).data)
+            return Response({
+                'user': LoginSerializer(user).data,
+                'csrf': csrf.get_token(request)
+            })
 
         return Response(status=403)

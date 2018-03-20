@@ -11,8 +11,8 @@ import debug_toolbar
 admin.autodiscover()
 
 urlpatterns = [
-    path(r'^admin/', admin.site.urls),
-    path(r'^docs/', include_docs_urls(title='Skills API')),
+    path(r'admin/', admin.site.urls),
+    path(r'docs/', include_docs_urls(title='Skills API')),
     path(r'auth/', Auth.as_view()),
     path(r'auth/identify/', IdentifyUser.as_view()),
     path(r'entries/', login_required(TimeEntries.as_view())),
